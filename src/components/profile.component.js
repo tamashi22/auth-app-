@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 class Profile extends Component {
   render() {
     const { user: currentUser } = this.props;
+    console.log(this.props);
     if (!currentUser) {
       return <Redirect to="/login" />;
     }
@@ -14,9 +15,9 @@ class Profile extends Component {
             <strong>{currentUser.name}</strong> Profile
           </h3>
         </header>
-        <p>
-          <strong>Token:</strong> {currentUser.accessToken.substring(0, 20)} ...{" "}
-          {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
+        <p onClick={() => console.log(currentUser)}>
+          <strong>Token:</strong> {currentUser.token.substring(0, 20)} ...{" "}
+          {currentUser.token.substr(currentUser.token.length - 20)}
         </p>
         <p>
           <strong>Id:</strong> {currentUser.id}
@@ -29,8 +30,8 @@ class Profile extends Component {
         </p>
         <strong>Authorities:</strong>
         <ul>
-         <li> {currentUser.role}</li>
-         <li> {currentUser.status}</li>
+          <li> {currentUser.role}</li>
+          <li> {currentUser.status}</li>
         </ul>
       </div>
     );
@@ -38,8 +39,9 @@ class Profile extends Component {
 }
 function mapStateToProps(state) {
   const { user } = state.auth;
+  console.log(state.auth);
   return {
-    user,
+    user
   };
 }
 export default connect(mapStateToProps)(Profile);

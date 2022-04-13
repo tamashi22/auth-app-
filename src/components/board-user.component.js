@@ -4,17 +4,28 @@ export default class BoardUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: ""
+      id: null,
+      name: "",
+      email: "",
+      age: null,
+      role: "",
+      status: ""
     };
   }
   componentDidMount() {
     userService.getUserBoard().then(
-      response => {
+      ({ id, name, email, age, role, status, token }) => {
         this.setState({
-          content: response.data
+          id: id,
+          name: name,
+          email: email,
+          age: age,
+          role: role,
+          status: status
         });
+        console.log(this.state.data);
       },
-      error => {
+      (error) => {
         this.setState({
           content:
             (error.response &&
@@ -30,8 +41,28 @@ export default class BoardUser extends Component {
     return (
       <div className="container">
         <header className="jumbotron">
-          <h3>{this.state.content}</h3>
+          <h3>{this.state.name} Profile</h3>
         </header>
+        <p>
+          <strong>Id:</strong> {this.state.id}
+        </p>
+        <p>
+          <strong>Email:</strong> {this.state.email}
+        </p>
+        <p>
+          <strong>Age:</strong> {this.state.age}
+        </p>
+
+        <ul>
+          <li>
+            {" "}
+            <strong>Role: </strong> {this.state.role}
+          </li>
+          <li>
+            <strong>Status: </strong>
+            {this.state.status}
+          </li>
+        </ul>
       </div>
     );
   }

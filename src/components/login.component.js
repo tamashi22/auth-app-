@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -23,23 +23,23 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      loading: false,
+      loading: false
     };
   }
   onChangeEmail(e) {
     this.setState({
-      email: e.target.value,
+      email: e.target.value
     });
   }
   onChangePassword(e) {
     this.setState({
-      password: e.target.value,
+      password: e.target.value
     });
   }
   handleLogin(e) {
     e.preventDefault();
     this.setState({
-      loading: true,
+      loading: true
     });
     this.form.validateAll();
     const { dispatch, history } = this.props;
@@ -56,7 +56,7 @@ class Login extends Component {
         });
     } else {
       this.setState({
-        loading: false,
+        loading: false
       });
     }
   }

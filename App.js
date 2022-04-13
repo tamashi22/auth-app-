@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Login from "./components/login.component";
@@ -22,7 +22,6 @@ class App extends Component {
       props.dispatch(clearMessage()); // clear message when changing location
     });
   }
-
   componentDidMount() {
     const user = this.props.user;
     if (user) {
@@ -34,7 +33,6 @@ class App extends Component {
   logOut() {
     this.props.dispatch(logout());
   }
-
   render() {
     const { currentUser } = this.state;
     return (
@@ -47,25 +45,25 @@ class App extends Component {
               </Link>
               <div className="navbar-nav mr-auto">
                 <li className="nav-item">
-                  <a href="/admin" className="nav-link">
-                    Admin
-                  </a>
+                  <Link to={"/home"} className="nav-link">
+                    Home
+                  </Link>
                 </li>
 
                 {currentUser && (
                   <li className="nav-item">
-                    <a href="/user" className="nav-link">
+                    <Link to={"/user"} className="nav-link">
                       User
-                    </a>
+                    </Link>
                   </li>
                 )}
               </div>
               {currentUser ? (
                 <div className="navbar-nav ml-auto">
                   <li className="nav-item">
-                    <a href="/profile" className="nav-link">
+                    <Link to={"/profile"} className="nav-link">
                       {currentUser.name}
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
                     <a href="/login" className="nav-link" onClick={this.logOut}>
@@ -76,25 +74,24 @@ class App extends Component {
               ) : (
                 <div className="navbar-nav ml-auto">
                   <li className="nav-item">
-                    <a href="/login" className="nav-link">
+                    <Link to={"/login"} className="nav-link">
                       Login
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/register" className="nav-link">
+                    <Link to={"/register"} className="nav-link">
                       Sign Up
-                    </a>
+                    </Link>
                   </li>
                 </div>
               )}
             </nav>
             <div className="container mt-3">
               <Switch>
-                <Route exact path={"/"} component={Red} />
-                <Route exact path={"/admin"} component={Home} />
-                <Route path="/login" component={Login} />
-                <Route path="/register" component={Register} />
-                <Route path="/profile" component={Profile} />
+                <Route exact path={["/", "/home"]} component={Home} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/register" component={Register} />
+                <Route exact path="/profile" component={Profile} />
                 <Route path="/user" component={BoardUser} />
               </Switch>
             </div>
@@ -110,8 +107,4 @@ function mapStateToProps(state) {
     user
   };
 }
-
-const Red = () => {
-  return <Redirect to="/home" />;
-};
 export default connect(mapStateToProps)(App);

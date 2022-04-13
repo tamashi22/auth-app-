@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import Form from 'react-validation/build/form';
-import Input from 'react-validation/build/input';
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import { connect } from "react-redux";
 import { register } from "../actions/auth";
+import { Redirect, useNavigate } from "react-router-dom";
+import { useHistory } from "react-router";
 
 const required = (value) => {
   if (!value) {
@@ -15,7 +17,7 @@ const required = (value) => {
     );
   }
 };
-const email = (value) => {
+const vemail = (value) => {
   if (!isEmail(value)) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -43,75 +45,85 @@ const vpassword = (value) => {
   }
 };
 const vage = (value) => {
-    if (value< "18" ) {
-      return (
-        <div className="alert alert-danger" role="alert">
-         You must be over 18 years old
-        </div>
-      );
-    }
-  };
+  if (value < "18") {
+    return (
+      <div className="alert alert-danger" role="alert">
+        You must be over 18 years old
+      </div>
+    );
+  }
+};
 class Register extends Component {
   constructor(props) {
     super(props);
     this.handleRegister = this.handleRegister.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
-    this.onChangeAge=this.onChangeAge.bind(this)
+    this.onChangeAge = this.onChangeAge.bind(this);
+    this.onChangeUsername = this.onChangeUsername.bind(this);
     this.state = {
-      name: "",
       email: "",
       password: "",
-      age:"",
-      successful: false,
+      age: "",
+      name: "",
+      successful: false
     };
-  }
-  onChangeUsername(e) {
-    this.setState({
-      name: e.target.value,
-    });
   }
   onChangeEmail(e) {
     this.setState({
-      email: e.target.value,
+      email: e.target.value
     });
   }
   onChangePassword(e) {
     this.setState({
-      password: e.target.value,
+      password: e.target.value
     });
   }
   onChangeAge(e) {
     this.setState({
-      age: e.target.value,
+      age: e.target.value
+    });
+  }
+  onChangeUsername(e) {
+    this.setState({
+      name: e.target.value
     });
   }
   handleRegister(e) {
     e.preventDefault();
     this.setState({
-      successful: false,
+      successful: false
     });
     this.form.validateAll();
     if (this.checkBtn.context._errors.length === 0) {
+      const { history } = this.props;
       this.props
         .dispatch(
-          register(this.state.name, this.state.email, this.state.password, this.state.age)
+          register(
+            this.state.email,
+            this.state.password,
+            parseInt(this.state.age, 10),
+            this.state.name
+          )
         )
         .then(() => {
           this.setState({
-            successful: true,
+            successful: true
           });
+          history.push("/login");
         })
         .catch(() => {
           this.setState({
-            successful: false,
+            successful: false
           });
         });
     }
   }
   render() {
-    const { message } = this.props;
+    const { REGISTER_SUCCESS,message } = this.props;
+    if (REGISTER_SUCCESS) {
+      return <Redirect to="/login" />;
+    }
     return (
       <div className="col-md-12">
         <div className="card card-container">
@@ -129,17 +141,6 @@ class Register extends Component {
             {!this.state.successful && (
               <div>
                 <div className="form-group">
-                  <label htmlFor="username">Name</label>
-                  <Input
-                    type="text"
-                    className="form-control"
-                    name="username"
-                    value={this.state.name}
-                    onChange={this.onChangeUsername}
-                    validations={[required, vusername]}
-                  />
-                </div>
-                <div className="form-group">
                   <label htmlFor="email">Email</label>
                   <Input
                     type="text"
@@ -147,7 +148,7 @@ class Register extends Component {
                     name="email"
                     value={this.state.email}
                     onChange={this.onChangeEmail}
-                    validations={[required, email]}
+                    validations={[required, vemail]}
                   />
                 </div>
                 <div className="form-group">
@@ -162,7 +163,7 @@ class Register extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="age">Age</label>
+                  <label htmlFor="age">age</label>
                   <Input
                     type="text"
                     className="form-control"
@@ -173,13 +174,32 @@ class Register extends Component {
                   />
                 </div>
                 <div className="form-group">
+                  <label htmlFor="username">Name</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="username"
+                    value={this.state.name}
+                    onChange={this.onChangeUsername}
+                    validations={[required, vusername]}
+                  />
+                </div>
+                <div className="form-group">
                   <button className="btn btn-primary btn-block">Sign Up</button>
                 </div>
               </div>
             )}
+            {this.state.successful && <Redirect to="/login" />}
             {message && (
               <div className="form-group">
-                <div className={ this.state.successful ? "alert alert-success" : "alert alert-danger" } role="alert">
+                <div
+                  className={
+                    this.state.successful
+                      ? "alert alert-success"
+                      : "alert alert-danger"
+                  }
+                  role="alert"
+                >
                   {message}
                 </div>
               </div>
@@ -199,7 +219,7 @@ class Register extends Component {
 function mapStateToProps(state) {
   const { message } = state.message;
   return {
-    message,
+    message
   };
 }
 export default connect(mapStateToProps)(Register);

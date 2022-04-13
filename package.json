@@ -1,5 +1,5 @@
 {
-  "name": "redux-auth",
+  "name": "v3",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,13 +8,18 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
     "bootstrap": "^4.6.1",
+    "bootstrap-table": "1.19.1",
+    "jquery": "3.6.0",
     "react": "^18.0.0",
+    "react-bootstrap": "2.2.3",
+    "react-dom": "18.0.0",
     "react-redux": "^7.2.8",
     "react-router": "^6.3.0",
     "react-router-dom": "^5.3.0",
     "react-scripts": "5.0.0",
     "react-validation": "^3.0.7",
     "redux": "^4.1.2",
+    "redux-devtools-extension": "2.13.9",
     "redux-thunk": "^2.4.1",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
@@ -46,5 +51,7 @@
   },
   "devDependencies": {
     "redux-devtools-extension": "^2.13.9"
-  }
+  },
+  "keywords": [],
+  "description": ""
 }
